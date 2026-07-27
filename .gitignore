@@ -1,0 +1,14 @@
+node_modules/
+dist/
+
+# devbox / nix
+.devbox/
+
+# repo-local rust toolchain state
+.cargo/
+.rustup/
+components/target/
+
+# build artifacts
+build/
+src/generated/

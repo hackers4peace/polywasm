@@ -1,0 +1,29 @@
+// Record the built artifact sizes so the page can show them as real data
+// rather than numbers hardcoded into the UI that quietly drift.
+import { mkdirSync, statSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const ROOT = resolve(import.meta.dirname, '..');
+const size = (p) => {
+  try {
+    return statSync(resolve(ROOT, p)).size;
+  } catch {
+    return null;
+  }
+};
+
+const manifest = {
+  backends: {
+    ts: { toolchain: 'ComponentizeJS · StarlingMonkey', bytes: size('build/ts.wasm') },
+    rust: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/rust.wasm') },
+  },
+  router: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/router.wasm') },
+  composed: { bytes: size('build/chat.wasm') },
+};
+
+mkdirSync(resolve(ROOT, 'src/generated'), { recursive: true });
+writeFileSync(
+  resolve(ROOT, 'src/generated/manifest.json'),
+  `${JSON.stringify(manifest, null, 2)}\n`,
+);
+console.log('wrote src/generated/manifest.json');

@@ -1,0 +1,25 @@
+// Wire the language components into the router, producing one self-contained
+// chat.wasm for the worker to load.
+//
+// The package names below (demo:ts-impl, demo:rust-impl, demo:router-impl) are
+// lookup keys resolved by the --dep flags in scripts/build.sh. They are NOT
+// matched against anything inside the .wasm files — each of those actually
+// declares itself as `root:component`.
+//
+// Note what makes this work: both handlers export `demo:chat/handler`, but the
+// router imports `demo:router/ts-handler` and `demo:router/rust-handler`. WAC
+// matches interfaces structurally, not by name, so identically-shaped
+// interfaces connect regardless of what they are called. That is the whole
+// trick that lets one interface have many implementations in one component.
+package demo:chat-composed;
+
+let ts = new demo:ts-impl { ... };
+let rs = new demo:rust-impl { ... };
+
+let router = new demo:router-impl {
+  "demo:router/ts-handler":   ts["demo:chat/handler"],
+  "demo:router/rust-handler": rs["demo:chat/handler"],
+  ...
+};
+
+export router...;

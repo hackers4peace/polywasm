@@ -1,0 +1,45 @@
+// The router's own world. It deliberately does NOT depend on demo:chat.
+//
+// The component model allows only one import per interface *name*, so a router
+// importing `demo:chat/handler` twice is impossible. Instead we declare one
+// distinctly-named import per backend. WAC matches interfaces *structurally*
+// (only `resource` types are nominal), so a component exporting
+// `demo:chat/handler` plugs into `demo:router/ts-handler` just fine — the
+// shapes are identical and that is all WAC checks.
+//
+// Adding a third language later = one more interface + one more import here,
+// one more argument in compose.wac, and one more arm in the router. It then
+// joins the rotation automatically.
+package demo:router;
+
+interface ts-handler {
+  handle: func(msg: string) -> string;
+}
+
+interface rust-handler {
+  handle: func(msg: string) -> string;
+}
+
+interface router {
+  /// One turn of the conversation: who spoke, and what they said.
+  record turn {
+    backend: string,
+    text: string,
+  }
+
+  /// Names of the participating backends, in a stable order. Drives the UI legend.
+  backends: func() -> list<string>;
+
+  /// Advance the conversation by one turn and return it.
+  ///
+  /// The component has no clock and no RNG of its own — it imports nothing from
+  /// the host — so entropy arrives as a parameter. Everything else (whose turn
+  /// it is, what they were told, what comes back) is decided in here.
+  next-turn: func(seed: u32) -> turn;
+}
+
+world router-component {
+  import ts-handler;
+  import rust-handler;
+  export router;
+}

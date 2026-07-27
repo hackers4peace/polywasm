@@ -1,0 +1,21 @@
+[workspace]
+resolver = "3"
+members = ["rust-handler", "router"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace.dependencies]
+wit-bindgen = "0.60"
+
+# Components ship over the wire to a browser, so optimise hard for size.
+# The Rust components target wasm32-unknown-unknown and import nothing from the
+# host, which keeps them in the low tens of KB.
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+panic = "abort"
+codegen-units = 1

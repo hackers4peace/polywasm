@@ -1,0 +1,21 @@
+{
+  "name": "polywasm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An autonomous multi-language chat running on the WebAssembly Component Model",
+  "scripts": {
+    "build:wasm": "./scripts/build.sh",
+    "dev": "npm run build:wasm && vite",
+    "build": "npm run build:wasm && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "inspect": "./scripts/inspect.sh",
+    "check:chain": "node scripts/chain-check.mjs"
+  },
+  "devDependencies": {
+    "@bytecodealliance/jco": "^1.26.1",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  }
+}

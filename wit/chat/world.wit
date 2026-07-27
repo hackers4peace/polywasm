@@ -1,0 +1,14 @@
+// The contract. Every language implements exactly this, and nothing else.
+// Deliberately unversioned: a versioned package produces export names like
+// `demo:chat/handler@0.1.0`, and version-string mismatches are the most common
+// WAC composition failure.
+package demo:chat;
+
+interface handler {
+  /// Take whatever was last said, reply with the next thing to say.
+  handle: func(msg: string) -> string;
+}
+
+world handler-component {
+  export handler;
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.5/.schema/devbox.schema.json",
+  "packages": [
+    "nodejs@24",
+    "rustc@1.97.0",
+    "cargo@1.97.0",
+    "lld@21.1.8",
+    "wasm-tools@1.254.0",
+    "wac-cli@0.10.1"
+  ],
+  "env": {
+    "CARGO_HOME": "$PWD/.cargo"
+  },
+  "shell": {
+    "init_hook": [
+      "export PATH=$PWD/node_modules/.bin:$PATH"
+    ]
+  }
+}

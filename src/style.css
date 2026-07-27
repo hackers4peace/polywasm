@@ -1,0 +1,342 @@
+/*
+ * Every participant is a peer, so none of them gets to be "the accent colour".
+ * The palette is a set of equal-weight hues assigned in backends() order, and
+ * two of them — the first two — also appear in the WIT signature at the top,
+ * tying the contract to the things that implement it.
+ */
+:root {
+  --ink: #0f1219;
+  --panel: #161b25;
+  --edge: #232c3b;
+  --fg: #dce4ee;
+  --dim: #78899e;
+
+  --p1: #63d2c3;
+  --p2: #f0894c;
+  --p3: #a98bf5;
+  --p4: #e8608c;
+  --p5: #9ec95a;
+
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --gutter: clamp(1rem, 4vw, 3rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--fg);
+  font-family: var(--sans);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4.5rem) var(--gutter) 3rem;
+}
+
+/* ── Masthead ─────────────────────────────────────────────────────────────── */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+.brand__name {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.brand__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.brand__status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.brand__status[data-state="live"] {
+  color: var(--p1);
+}
+
+.brand__status[data-state="stopped"] {
+  color: var(--p2);
+}
+
+/* The hero is the contract itself. */
+.signature {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: clamp(1.3rem, 3.9vw, 2.35rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.signature__fn {
+  color: var(--fg);
+}
+
+.signature__punct,
+.signature__arrow {
+  color: var(--dim);
+}
+
+.signature__arg {
+  color: var(--p2);
+}
+
+.signature__ret {
+  color: var(--p1);
+}
+
+.blurb {
+  max-width: 62ch;
+  margin: 1.25rem 0 0;
+  color: var(--dim);
+  font-size: 0.95rem;
+}
+
+/* ── Participants ─────────────────────────────────────────────────────────── */
+
+.roster {
+  margin-top: 3rem;
+}
+
+.roster__label {
+  margin: 0 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* Wraps rather than dividing the width, so a fourth or fifth language costs
+   nothing structurally. */
+.participants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.peer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-left: 2px solid var(--peer);
+}
+
+.peer__name {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--peer);
+}
+
+.peer__toolchain {
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+
+.peer__size {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--fg);
+  opacity: 0.7;
+}
+
+/* ── Transcript ───────────────────────────────────────────────────────────── */
+
+.frame {
+  margin-top: 1.25rem;
+  border: 1px solid var(--edge);
+  background: var(--panel);
+}
+
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-height: min(62vh, 36rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge) transparent;
+}
+
+.log:focus-visible {
+  outline: 2px solid var(--p1);
+  outline-offset: -2px;
+}
+
+.waiting,
+.problem {
+  margin: 0;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.problem {
+  text-align: left;
+  border-left: 2px solid var(--p2);
+}
+
+.problem__title {
+  margin: 0 0 0.4rem;
+  color: var(--p2);
+}
+
+.problem__detail {
+  margin: 0 0 0.4rem;
+  color: var(--fg);
+  word-break: break-word;
+}
+
+.problem__fix {
+  margin: 0;
+}
+
+/* Components speak on the right. `data-side="left"` is styled and waiting for
+   user messages; nothing emits it yet. */
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.turn[data-side="right"] {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.turn[data-side="left"] {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.turn__meta {
+  display: flex;
+  gap: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+
+.turn__who {
+  color: var(--peer);
+  text-transform: uppercase;
+}
+
+.turn__text {
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  max-width: min(58ch, 78%);
+  /* The block sits on the right, but its text reads left-to-right like any
+     other text — right-aligning the wrapped lines of a quoted string makes it
+     much harder to follow. */
+  text-align: left;
+  background: rgb(255 255 255 / 3%);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+.turn[data-side="right"] .turn__text {
+  border-right: 2px solid var(--peer);
+}
+
+.turn[data-side="left"] .turn__text {
+  border-left: 2px solid var(--peer);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  justify-content: space-between;
+  margin-top: 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .turn {
+    animation: arrive 220ms ease-out both;
+  }
+
+  .turn[data-side="right"] {
+    --from: 0.75rem;
+  }
+
+  .turn[data-side="left"] {
+    --from: -0.75rem;
+  }
+
+  @keyframes arrive {
+    from {
+      opacity: 0;
+      transform: translateX(var(--from, 0));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ── Narrow screens ───────────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .log {
+    padding: 1rem;
+  }
+
+  .turn__text {
+    max-width: 100%;
+  }
+}
