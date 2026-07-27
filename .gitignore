@@ -12,3 +12,6 @@ components/target/
 # build artifacts
 build/
 src/generated/
+
+# npm lock
+package-lock.json
