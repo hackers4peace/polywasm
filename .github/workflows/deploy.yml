@@ -5,13 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Grant GITHUB_TOKEN the permissions needed for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -20,17 +18,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install devbox
-        uses: jetify-com/devbox-install-action@v0.11.0
+      - name: Install Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Rust 1.97
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.97.0
+          targets: wasm32-unknown-unknown
+
+      - name: Install system dependencies (lld)
+        run: sudo apt-get update && sudo apt-get install -y lld
+
+      - name: Install wasm-tools 1.254.0
+        run: |
+          curl -sL https://github.com/bytecodealliance/wasm-tools/releases/download/v1.254.0/wasm-tools-1.254.0-x86_64-linux.tar.gz \
+            | tar xz -C /usr/local/bin --strip-components=1 --wildcards '*/wasm-tools'
+          wasm-tools --version
+
+      - name: Install wac-cli 0.10.1
+        run: |
+          curl -sL https://github.com/bytecodealliance/wac/releases/download/v0.10.1/wac-cli-x86_64-unknown-linux-musl \
+            -o /usr/local/bin/wac
+          chmod +x /usr/local/bin/wac
+          wac --version
 
       - name: Install npm dependencies
-        run: devbox run -- npm ci
+        run: npm ci
 
-      - name: Build the project
-        run: devbox run -- npm run build
+      - name: Build everything
+        run: npm run build
+        env:
+          CARGO_HOME: ${{ github.workspace }}/.cargo
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
