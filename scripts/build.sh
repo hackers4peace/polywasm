@@ -20,6 +20,13 @@ echo "==> Rust components (wasm32-unknown-unknown, no host imports)"
 wasm-tools component new "$TARGET_DIR/rust_handler.wasm" -o "$OUT/rust.wasm"
 wasm-tools component new "$TARGET_DIR/router.wasm"       -o "$OUT/router.wasm"
 
+echo "==> Go component (componentize-go)"
+export PATH="$HOME/go/bin:$PATH"
+(
+  cd components/go-handler
+  componentize-go -d ../../wit/chat -w handler-component build -o "$OLDPWD/$OUT/go.wasm"
+)
+
 echo "==> Python component (componentize-py / CPython)"
 if [ ! -d .venv-componentize-py ]; then
   python3 -m venv .venv-componentize-py
@@ -55,6 +62,7 @@ wac compose \
   --dep demo:ts-impl="$OUT/ts.wasm" \
   --dep demo:rust-impl="$OUT/rust.wasm" \
   --dep demo:py-impl="$OUT/py.wasm" \
+  --dep demo:go-impl="$OUT/go.wasm" \
   --dep demo:router-impl="$OUT/router.wasm" \
   -o "$OUT/chat.wasm" \
   compose.wac

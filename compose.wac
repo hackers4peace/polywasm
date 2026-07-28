@@ -16,11 +16,13 @@ package demo:chat-composed;
 let ts = new demo:ts-impl { ... };
 let rs = new demo:rust-impl { ... };
 let py = new demo:py-impl { ... };
+let go = new demo:go-impl { ... };
 
 let router = new demo:router-impl {
   "demo:router/ts-handler":   ts["demo:chat/handler"],
   "demo:router/rust-handler": rs["demo:chat/handler"],
   "demo:router/py-handler":   py["demo:chat/handler"],
+  "demo:router/go-handler":   go["demo:chat/handler"],
   ...
 };
 
