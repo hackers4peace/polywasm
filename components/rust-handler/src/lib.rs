@@ -24,6 +24,6 @@ impl bindings::exports::demo::chat::handler::Guest for Component {
         // participant speaks emoji, and slicing a string mid-codepoint would
         // both panic and corrupt the transcript.
         let head: String = msg.chars().take(QUOTE_CHARS).collect();
-        format!("{} [{} bytes]", head.to_uppercase(), msg.len())
+        format!("🦀 {} [{} bytes]", head.to_uppercase(), msg.len())
     }
 }

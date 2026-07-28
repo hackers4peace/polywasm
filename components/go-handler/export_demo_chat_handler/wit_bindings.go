@@ -34,5 +34,5 @@ func Handle(msg string) string {
 	}
 
 	total := len(runes)
-	return buf.String() + fmt.Sprintf(" (ʚ: %d runes)", total)
+	return buf.String() + fmt.Sprintf(" 🐹 (ʚ: %d runes)", total)
 }

@@ -117,7 +117,7 @@ export class Transcript {
         const card = el('div', 'peer');
         card.style.setProperty('--peer', colorFor(i));
         card.append(
-          el('span', 'peer__name', backend.name),
+          el('span', 'peer__name', `${backend.name} ${backend.emoji}`),
           el('span', 'peer__toolchain', backend.toolchain),
           el('span', 'peer__size', formatBytes(backend.bytes)),
         );

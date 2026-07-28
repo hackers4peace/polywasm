@@ -21,7 +21,7 @@ const post = (message: FromWorker): void =>
 
 const describe = (name: string): Backend => {
   const entry = manifest.backends[name as keyof typeof manifest.backends];
-  return { name, toolchain: entry?.toolchain ?? 'unknown', bytes: entry?.bytes ?? null };
+  return { name, emoji: entry?.emoji ?? '', toolchain: entry?.toolchain ?? 'unknown', bytes: entry?.bytes ?? null };
 };
 
 async function start(): Promise<void> {

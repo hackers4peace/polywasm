@@ -22,6 +22,6 @@ export const handler = {
     // half — and this component emits one, so that would happen on turn two.
     const head = [...msg].slice(0, QUOTE_CHARS).join('');
     const words = msg.split(/\s+/).filter(Boolean).length;
-    return `👋 i heard "${head}" (${words} words)`;
+    return `🥱 i heard "${head}" (${words} words)`;
   },
 };

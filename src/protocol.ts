@@ -9,6 +9,7 @@
 
 export interface Backend {
   name: string;
+  emoji: string;
   toolchain: string;
   bytes: number | null;
 }

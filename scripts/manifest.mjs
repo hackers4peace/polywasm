@@ -14,11 +14,11 @@ const size = (p) => {
 
 const manifest = {
   backends: {
-    ts: { toolchain: 'ComponentizeJS · StarlingMonkey', bytes: size('build/ts.wasm') },
-    rust: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/rust.wasm') },
-    py: { toolchain: 'componentize-py · CPython', bytes: size('build/py.wasm') },
-    go: { toolchain: 'componentize-go · Go 1.26', bytes: size('build/go.wasm') },
-    csharp: { toolchain: 'componentize-dotnet · NativeAOT-LLVM', bytes: size('build/csharp.wasm') },
+    ts: { emoji: '🥱', toolchain: 'ComponentizeJS · StarlingMonkey', bytes: size('build/ts.wasm') },
+    rust: { emoji: '🦀', toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/rust.wasm') },
+    py: { emoji: '🐍', toolchain: 'componentize-py · CPython', bytes: size('build/py.wasm') },
+    go: { emoji: '🐹', toolchain: 'componentize-go · Go 1.26', bytes: size('build/go.wasm') },
+    csharp: { emoji: '🔷', toolchain: 'componentize-dotnet · NativeAOT-LLVM', bytes: size('build/csharp.wasm') },
   },
   router: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/router.wasm') },
   composed: { bytes: size('build/chat.wasm') },
