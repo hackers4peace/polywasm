@@ -30,8 +30,11 @@ main thread          worker                  chat.wasm  (one composed component)
                      setInterval(1s) ──────► demo:router/router
   render  ◄── postMessage ──                   next-turn(seed)
                                                  │  shuffles, picks a speaker
-                                                 ├─► demo:router/ts-handler   → ts.wasm    (12 MB)
-                                                 └─► demo:router/rust-handler → rust.wasm  (23 KB)
+                                                 ├─► demo:router/ts-handler     → ts.wasm    (12 MB)
+                                                 ├─► demo:router/rust-handler   → rust.wasm  (23 KB)
+                                                 ├─► demo:router/py-handler     → py.wasm    (.. KB)
+                                                 ├─► demo:router/go-handler     → go.wasm    (.. KB)
+                                                 └─► demo:router/csharp-handler → csharp.wasm (.. KB)
 ```
 
 The host contributes a clock tick and 32 random bits. Everything else — who
@@ -67,15 +70,18 @@ so `chat.wasm` is fully self-contained and jco generates no shim at all.
 ## Layout
 
 ```
-wit/chat/world.wit      the contract both languages implement
-wit/router/world.wit    the router's world
-components/rust-handler Rust implementation (uppercase persona)
-components/ts-handler   TypeScript implementation (quoting persona)
-components/router       turn-taking, state, dispatch — all in wasm
-compose.wac             wires the three together
-scripts/build.sh        build → compose → transpile
-src/worker.ts           the clock. That is the whole host-side logic
-src/ui.ts, src/main.ts  display only
+wit/chat/world.wit        the contract both languages implement
+wit/router/world.wit      the router's world
+components/rust-handler   Rust implementation (uppercase persona)
+components/ts-handler     TypeScript implementation (quoting persona)
+components/py-handler     Python implementation (snake persona)
+components/go-handler     Go implementation (reverse persona)
+components/csharp-handler C# implementation (PascalCase persona)
+components/router         turn-taking, state, dispatch — all in wasm
+compose.wac               wires the three together
+scripts/build.sh          build → compose → transpile
+src/worker.ts             the clock. That is the whole host-side logic
+src/ui.ts, src/main.ts    display only
 ```
 
 The transcript is a single column: participants are listed once at the top, and
@@ -99,24 +105,27 @@ length converges instead of growing every turn, truncation never splits an
 emoji, the shuffle gives every backend an equal share, and a fixed seed
 sequence reproduces the transcript exactly.
 
-## Adding a third language
+## Adding a language
 
 The pieces are shaped for it:
 
-1. Add `csharp-handler` to `wit/router/world.wit` as an interface and an import.
+1. Add the handler interface to `wit/router/world.wit` and an import in the world.
 2. Add a match arm in `components/router/src/lib.rs` and the name to `BACKENDS`.
 3. Add a `--dep` and an instantiation argument in `compose.wac`.
+4. Add a build step in `scripts/build.sh`.
 
 The UI picks it up automatically: the participant list comes from `backends()`,
 and each one is assigned a colour in that order. Nothing about the layout is
 per-language.
 
-C# is not wired up yet because `componentize-dotnet` compiles via NativeAOT-LLVM
-and the `runtime.osx-arm64.Microsoft.DotNet.ILCompiler.LLVM` package does not
-exist (see [componentize-dotnet#101]). `linux-arm64` does publish it, so a
-`linux/arm64` container is the way in — a build-time dependency only.
+### C# caveats
 
-[componentize-dotnet#101]: https://github.com/bytecodealliance/componentize-dotnet/issues/101
+The C# handler is built with [componentize-dotnet], which compiles via
+NativeAOT-LLVM. The `runtime.osx-arm64.Microsoft.DotNet.ILCompiler.LLVM`
+package is not published, so macOS arm64 users should build from a Linux
+environment (devbox provides `linux/amd64` on any host).
+
+[componentize-dotnet]: https://github.com/bytecodealliance/componentize-dotnet
 
 ## Toolchain
 

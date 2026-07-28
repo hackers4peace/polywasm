@@ -8,7 +8,8 @@
     "wasm-tools@1.254.0",
     "wac-cli@0.10.1",
     "python@3.12",
-    "go@latest"
+    "go@latest",
+    "dotnet-sdk_10"
   ],
   "env": {
     "CARGO_HOME": "$PWD/.cargo"

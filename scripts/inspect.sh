@@ -6,7 +6,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-for f in build/rust.wasm build/router.wasm build/ts.wasm build/py.wasm build/go.wasm build/chat.wasm; do
+for f in build/rust.wasm build/router.wasm build/ts.wasm build/py.wasm build/go.wasm build/csharp.wasm build/chat.wasm; do
   [ -f "$f" ] || continue
   echo "════════════════════════════════════════════════════"
   echo "  $f  ($(du -h "$f" | cut -f1))"

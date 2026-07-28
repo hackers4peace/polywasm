@@ -54,6 +54,13 @@ jco componentize \
   --out "$OUT/ts.wasm" \
   components/ts-handler/handler.ts
 
+echo "==> C# component (componentize-dotnet / NativeAOT-LLVM)"
+(
+  cd components/csharp-handler
+  dotnet build -c Release
+)
+cp components/csharp-handler/bin/Release/net10.0/wasi-wasm/native/csharp-handler.wasm "$OUT/csharp.wasm"
+
 echo "==> WAC composition"
 # --dep names are lookup keys only; they are matched against the .wac source,
 # not against anything inside the .wasm files. Dependencies are embedded by
@@ -63,6 +70,7 @@ wac compose \
   --dep demo:rust-impl="$OUT/rust.wasm" \
   --dep demo:py-impl="$OUT/py.wasm" \
   --dep demo:go-impl="$OUT/go.wasm" \
+  --dep demo:csharp-impl="$OUT/csharp.wasm" \
   --dep demo:router-impl="$OUT/router.wasm" \
   -o "$OUT/chat.wasm" \
   compose.wac

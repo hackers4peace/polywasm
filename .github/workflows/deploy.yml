@@ -60,6 +60,12 @@ jobs:
       - name: Install componentize-go
         run: go install github.com/bytecodealliance/componentize-go@latest
 
+      - name: Install .NET SDK 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+          dotnet-quality: preview
+
       - name: Install npm dependencies
         run: npm install
 
