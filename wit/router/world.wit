@@ -20,6 +20,10 @@ interface rust-handler {
   handle: func(msg: string) -> string;
 }
 
+interface py-handler {
+  handle: func(msg: string) -> string;
+}
+
 interface router {
   /// One turn of the conversation: who spoke, and what they said.
   record turn {
@@ -41,5 +45,6 @@ interface router {
 world router-component {
   import ts-handler;
   import rust-handler;
+  import py-handler;
   export router;
 }

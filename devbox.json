@@ -6,7 +6,8 @@
     "cargo@1.97.0",
     "lld@21.1.8",
     "wasm-tools@1.254.0",
-    "wac-cli@0.10.1"
+    "wac-cli@0.10.1",
+    "python@3.12"
   ],
   "env": {
     "CARGO_HOME": "$PWD/.cargo"

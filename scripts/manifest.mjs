@@ -16,6 +16,7 @@ const manifest = {
   backends: {
     ts: { toolchain: 'ComponentizeJS · StarlingMonkey', bytes: size('build/ts.wasm') },
     rust: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/rust.wasm') },
+    py: { toolchain: 'componentize-py · CPython', bytes: size('build/py.wasm') },
   },
   router: { toolchain: 'rustc · wasm32-unknown-unknown', bytes: size('build/router.wasm') },
   composed: { bytes: size('build/chat.wasm') },

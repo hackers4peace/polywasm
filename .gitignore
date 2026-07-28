@@ -9,6 +9,13 @@ dist/
 .rustup/
 components/target/
 
+# Python virtual environments
+.venv/
+.venv-componentize-py/
+
+# Python bytecode cache
+__pycache__/
+
 # build artifacts
 build/
 src/generated/

@@ -17,7 +17,7 @@ use std::cell::RefCell;
 /// Participating backends, in stable display order. The index into this array
 /// is the backend's identity everywhere in this module — including which
 /// imported interface `speak` dispatches to.
-const BACKENDS: [&str; 2] = ["ts", "rust"];
+const BACKENDS: [&str; 3] = ["ts", "rust", "py"];
 
 /// What the first speaker is asked to react to.
 ///
@@ -70,6 +70,7 @@ fn speak(backend: usize, msg: &str) -> String {
     match backend {
         0 => bindings::demo::router::ts_handler::handle(msg),
         1 => bindings::demo::router::rust_handler::handle(msg),
+        2 => bindings::demo::router::py_handler::handle(msg),
         _ => unreachable!("backend index out of range"),
     }
 }
